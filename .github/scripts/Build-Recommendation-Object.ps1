@@ -30,7 +30,7 @@ function Build-APRLJsonObject {
 
 #Try to build and export the object. If it fails, catch the error and exit with code 1
 try{
-  Build-APRLJsonObject -path @("./azure-resources","./azure-specialized-workloads","./azure-waf") | ConvertTo-Json -Depth 20 | Out-File -FilePath "./docs/objects/recommendations.json" -Force
+  Build-APRLJsonObject -path @("./cloned-repo/azure-resources","./cloned-repo/azure-specialized-workloads","./cloned-repo/azure-waf") | ConvertTo-Json -Depth 20 | Out-File -FilePath "./docs/objects/recommendations.json" -Force
   exit 0
 }
 catch{
