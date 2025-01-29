@@ -1,0 +1,21 @@
+{
+    "aprlGuid": "bb6deb9d-24fa-4ee8-bc23-ac3ebc7fdf8e",
+    "recommendationTypeId": null,
+    "recommendationMetadataState": "Active",
+    "learnMoreLink": [
+      {
+        "url": "https://learn.microsoft.com/en-us/entra/identity/domain-services/tutorial-create-replica-set",
+        "name": "Create and use replica sets for resiliency or geolocation in Microsoft Entra Domain Services"
+      }
+    ],
+    "recommendationControl": "HighAvailability",
+    "longDescription": "You need to use a minimum of Enterprise SKU for your managed domain to support replica sets.\n",
+    "pgVerified": false,
+    "description": "Use at least the Enterprise SKU",
+    "potentialBenefits": "The Enterprise SKU enables creation of replica sets.",
+    "tags": null,
+    "recommendationResourceType": "Microsoft.AAD/domainServices",
+    "recommendationImpact": "High",
+    "automationAvailable": true,
+    "query": "// Azure Resource Graph Query\r\n// Gets Entry Domain Services that are using the Standard SKU\r\nresources\r\n| where type == \"microsoft.aad/domainservices\"\r\n| extend sku = properties.sku\r\n| where sku =~ 'Standard'\r\n| project recommendationId='bb6deb9d-24fa-4ee8-bc23-ac3ebc7fdf8e', name=name, id=id, tags=tags, param1=strcat('SKU:', sku)\r\n"
+  }
