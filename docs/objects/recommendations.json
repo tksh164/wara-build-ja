@@ -2711,7 +2711,7 @@
     "tags": [],
     "recommendationResourceType": "Microsoft.Search/searchServices",
     "recommendationImpact": "Medium",
-    "automationAvailable": true,
+    "automationAvailable": false,
     "query": "// under-development\n"
   },
   {
@@ -3406,7 +3406,7 @@
     ],
     "recommendationResourceType": "Microsoft.Network/bastionHosts",
     "recommendationImpact": "Medium",
-    "automationAvailable": true,
+    "automationAvailable": false,
     "query": "// under-development\n"
   },
   {
@@ -4143,7 +4143,7 @@
     "tags": [],
     "recommendationResourceType": "Microsoft.Network/dnsResolvers",
     "recommendationImpact": "High",
-    "automationAvailable": true,
+    "automationAvailable": false,
     "query": "// under-development\n"
   },
   {
@@ -9403,7 +9403,7 @@
     "tags": [],
     "recommendationResourceType": "Microsoft.Subscription/subscriptions",
     "recommendationImpact": "Medium",
-    "automationAvailable": true,
+    "automationAvailable": false,
     "query": "// cannot-be-validated-with-arg\n"
   },
   {
@@ -9421,7 +9421,9 @@
     "pgVerified": true,
     "description": "RE:01 Design your workload to align with business objectives",
     "potentialBenefits": "Meet business requirements",
-    "tags": [],
+    "tags": [
+      "WAF"
+    ],
     "recommendationResourceType": "Microsoft.Subscription/Subscriptions",
     "recommendationImpact": "Medium",
     "automationAvailable": false,
@@ -9442,7 +9444,9 @@
     "pgVerified": true,
     "description": "RE:02 Identify and rate user and system flows",
     "potentialBenefits": "Align architecture with reliability goals",
-    "tags": [],
+    "tags": [
+      "WAF"
+    ],
     "recommendationResourceType": "Microsoft.Subscription/Subscriptions",
     "recommendationImpact": "Medium",
     "automationAvailable": false,
@@ -9463,7 +9467,9 @@
     "pgVerified": true,
     "description": "RE:03 Use failure mode analysis to identify and prioritize potential failures",
     "potentialBenefits": "Reduce risk of unpredicted behavior",
-    "tags": [],
+    "tags": [
+      "WAF"
+    ],
     "recommendationResourceType": "Microsoft.Subscription/Subscriptions",
     "recommendationImpact": "Medium",
     "automationAvailable": false,
@@ -9484,7 +9490,9 @@
     "pgVerified": true,
     "description": "RE:04 Define reliability and recovery targets",
     "potentialBenefits": "Communicate reliability expectations with stakeholders",
-    "tags": [],
+    "tags": [
+      "WAF"
+    ],
     "recommendationResourceType": "Microsoft.Subscription/Subscriptions",
     "recommendationImpact": "Medium",
     "automationAvailable": false,
@@ -9505,7 +9513,9 @@
     "pgVerified": true,
     "description": "RE:05 Design for redundancy",
     "potentialBenefits": "Optimize for resiliency",
-    "tags": [],
+    "tags": [
+      "WAF"
+    ],
     "recommendationResourceType": "Microsoft.Subscription/Subscriptions",
     "recommendationImpact": "Medium",
     "automationAvailable": false,
@@ -9526,7 +9536,9 @@
     "pgVerified": true,
     "description": "RE:05 Design for multi-region high availability",
     "potentialBenefits": "Minimize downtime from regional outages",
-    "tags": [],
+    "tags": [
+      "WAF"
+    ],
     "recommendationResourceType": "Microsoft.Subscription/Subscriptions",
     "recommendationImpact": "Medium",
     "automationAvailable": false,
@@ -9547,7 +9559,9 @@
     "pgVerified": true,
     "description": "RE:05 Design for high availability with availability zones",
     "potentialBenefits": "Minimize downtime from zonal outages",
-    "tags": [],
+    "tags": [
+      "WAF"
+    ],
     "recommendationResourceType": "Microsoft.Subscription/Subscriptions",
     "recommendationImpact": "Medium",
     "automationAvailable": false,
@@ -9568,7 +9582,9 @@
     "pgVerified": true,
     "description": "RE:06 Design for data partitioning",
     "potentialBenefits": "Improve data estate reliability",
-    "tags": [],
+    "tags": [
+      "WAF"
+    ],
     "recommendationResourceType": "Microsoft.Subscription/Subscriptions",
     "recommendationImpact": "Medium",
     "automationAvailable": false,
@@ -9589,7 +9605,9 @@
     "pgVerified": true,
     "description": "RE:06 Design for reliable scaling",
     "potentialBenefits": "Dynamically handle increased load",
-    "tags": [],
+    "tags": [
+      "WAF"
+    ],
     "recommendationResourceType": "Microsoft.Subscription/Subscriptions",
     "recommendationImpact": "Medium",
     "automationAvailable": false,
@@ -9610,7 +9628,9 @@
     "pgVerified": true,
     "description": "RE:07 Use background jobs",
     "potentialBenefits": "Minimize application load",
-    "tags": [],
+    "tags": [
+      "WAF"
+    ],
     "recommendationResourceType": "Microsoft.Subscription/Subscriptions",
     "recommendationImpact": "Medium",
     "automationAvailable": false,
@@ -9631,7 +9651,9 @@
     "pgVerified": true,
     "description": "RE:07 Implement self-preservation and self-healing measures",
     "potentialBenefits": "Reduce the likelihood of outages",
-    "tags": [],
+    "tags": [
+      "WAF"
+    ],
     "recommendationResourceType": "Microsoft.Subscription/Subscriptions",
     "recommendationImpact": "Medium",
     "automationAvailable": false,
@@ -9652,7 +9674,9 @@
     "pgVerified": true,
     "description": "RE:07 Handle transient faults",
     "potentialBenefits": "Reduce the likelihood of outages",
-    "tags": [],
+    "tags": [
+      "WAF"
+    ],
     "recommendationResourceType": "Microsoft.Subscription/Subscriptions",
     "recommendationImpact": "Medium",
     "automationAvailable": false,
@@ -9673,7 +9697,9 @@
     "pgVerified": true,
     "description": "RE:08 Design a reliability testing strategy",
     "potentialBenefits": "Validate and optimize workload reliability",
-    "tags": [],
+    "tags": [
+      "WAF"
+    ],
     "recommendationResourceType": "Microsoft.Subscription/Subscriptions",
     "recommendationImpact": "Medium",
     "automationAvailable": false,
@@ -9694,7 +9720,9 @@
     "pgVerified": true,
     "description": "RE:09 Implement business continuity and disaster recovery plan",
     "potentialBenefits": "Reliable disaster recovery",
-    "tags": [],
+    "tags": [
+      "WAF"
+    ],
     "recommendationResourceType": "Microsoft.Subscription/Subscriptions",
     "recommendationImpact": "Medium",
     "automationAvailable": false,
@@ -9715,7 +9743,9 @@
     "pgVerified": true,
     "description": "RE:10 Design a reliable monitoring and alerting strategy",
     "potentialBenefits": "Observability into workload health",
-    "tags": [],
+    "tags": [
+      "WAF"
+    ],
     "recommendationResourceType": "Microsoft.Subscription/Subscriptions",
     "recommendationImpact": "Medium",
     "automationAvailable": false,
