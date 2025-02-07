@@ -1822,7 +1822,7 @@
       }
     ],
     "recommendationControl": "HighAvailability",
-    "longDescription": "Multi-region write capability allows for designing applications that are highly available across multiple regions, though it demands careful attention to consistency requirements and conflict resolution. Improper setup may decrease availability and cause data corruption due to unhandled conflicts.\n",
+    "longDescription": "Multi-region writes enable high availability but require careful consistency and conflict resolution. Using Bounded Staleness is an anti-pattern, as replication lag increases latency and coordination overhead. This setup undermines scalability, impacting performance and availability.\n",
     "pgVerified": true,
     "description": "Evaluate multi-region write capability",
     "potentialBenefits": "Enhances high availability",
@@ -3517,27 +3517,6 @@
     "query": "// Azure Resource Graph Query\n// Find all ExpressRoute Connections that are connected to ErGw3AZ or UltraPerformance gateway sku that don't have\n// FastPath enabled for both the Gateway Bypass or Private Endpoint/Link service.\nresources\n| where type == \"microsoft.network/connections\"\n| where properties.connectionType =~ 'expressroute'\n| extend gatewayId = tostring(properties.virtualNetworkGateway1.id)\n| join kind=inner (\n    resources\n    | where type =~ \"Microsoft.Network/virtualNetworkGateways\"\n    | where properties.sku.name in~ (\"ErGw3AZ\", \"UltraPerformance\")\n    | extend gatewayId = tostring(id)\n) on gatewayId\n| extend erGatewayBypass = tobool(properties.expressRouteGatewayBypass)\n| extend privateLinkFastPath = tobool(properties.enablePrivateLinkFastPath)\n| where not(erGatewayBypass) or not(privateLinkFastPath)\n| project recommendationId = \"f6a14b32-a727-4ace-b5fa-7b1c6bdff402\", id, name, tags,\n    param1 = iff(erGatewayBypass, \"Enabled: Gateway Bypass\", \"Disabled: Gateway Bypass\"),\n    param2 = iff(privateLinkFastPath, \"Enabled: PE FastPath\", \"Disabled: PE FastPath\")\n"
   },
   {
-    "aprlGuid": "a5f3a4bd-4cf1-4196-a3cb-f5a0876198b2",
-    "recommendationTypeId": null,
-    "recommendationMetadataState": "Disabled",
-    "learnMoreLink": [
-      {
-        "url": "https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/lock-resources?tabs=json",
-        "name": "Protect your Azure resources with a lock - Azure Resource Manager | Microsoft Learn"
-      }
-    ],
-    "recommendationControl": "HighAvailability",
-    "longDescription": "Configure an Azure Resource lock for Gateway Connection resources to prevent accidental deletion and maintain connectivity between on-premises networks and Azure workloads.\n",
-    "pgVerified": true,
-    "description": "Configure an Azure Resource Lock on connections to prevent accidental deletion",
-    "potentialBenefits": "Prevents accidental deletion of connections",
-    "tags": [],
-    "recommendationResourceType": "Microsoft.Network/connections",
-    "recommendationImpact": "Medium",
-    "automationAvailable": false,
-    "query": "// under-development\n\n"
-  },
-  {
     "aprlGuid": "f0d4f766-ac19-48c4-b228-4601cc038baa",
     "recommendationTypeId": null,
     "recommendationMetadataState": "Active",
@@ -3790,27 +3769,6 @@
     "query": "// Azure Resource Graph Query\n// For all VNGs of type ExpressRoute, show all that are not zone redundant (Zonal or Regional)\nadvisorresources\n| where properties.recommendationTypeId =~ 'c9af1ef6-55bc-48af-bfe4-2c80490159f8' // RecommendationID from Advisor\n| mv-expand resId = properties.resourceMetadata.resourceId\n| extend resId = tostring(resId)\n| project recId = properties.recommendationTypeId, resId\n| join kind=leftouter (\n    resources\n    | extend id = tostring(id)\n    | project id, name, tags, location, properties\n) on $left.resId == $right.id\n| project recommendationId = \"bbe668b7-eb5c-c746-8b82-70afdedf0cae\", name , id = resId, tags, param1 = strcat(\"sku-tier: \", properties.sku.tier), param2 = location,param3 = \"Non Zone-Redundant GW\"\n"
   },
   {
-    "aprlGuid": "c0f23a92-d322-4d4d-97e9-a238b5e3bbb8",
-    "recommendationTypeId": null,
-    "recommendationMetadataState": "Disabled",
-    "learnMoreLink": [
-      {
-        "url": "https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/lock-resources?tabs=json",
-        "name": "Protect your Azure resources with a lock - Azure Resource Manager | Microsoft Learn"
-      }
-    ],
-    "recommendationControl": "HighAvailability",
-    "longDescription": "Configuring an Azure Resource lock for ExpressRoute gateway prevents accidental deletion by enabling administrators to lock an Azure subscription, resource group, or resource, thereby protecting them from unintended user deletions and modifications, with the lock overriding all user permissions.\n",
-    "pgVerified": true,
-    "description": "Configure an Azure Resource lock for ExpressRoute gateway to prevent accidental deletion",
-    "potentialBenefits": "Prevents accidental deletions",
-    "tags": [],
-    "recommendationResourceType": "Microsoft.Network/virtualNetworkGateways",
-    "recommendationImpact": "Medium",
-    "automationAvailable": false,
-    "query": "// under-development\n\n"
-  },
-  {
     "aprlGuid": "1c34faa8-8b99-974c-adbf-71922eae943c",
     "recommendationTypeId": null,
     "recommendationMetadataState": "Active",
@@ -3871,7 +3829,28 @@
     "recommendationResourceType": "Microsoft.Network/virtualNetworkGateways",
     "recommendationImpact": "Medium",
     "automationAvailable": true,
-    "query": "// Azure Resource Graph Query\n// Find all Virtual Network Gateways without Maintenance Configurations\n\nresources\n| where type =~ \"Microsoft.Network/virtualNetworkGateways\"\n| extend resourceId = tolower(id)\n| join kind=leftouter  (\n    maintenanceresources\n    | where type =~ \"Microsoft.Maintenance/configurationAssignments\"\n    | project JsonData = parse_json(properties)\n    | extend maintenanceConfigurationId = tolower(tostring(JsonData.maintenanceConfigurationId))\n    | join kind=inner (\n        resources\n        | where type =~ \"Microsoft.Maintenance/maintenanceConfigurations\"\n        | project maintenanceConfigurationId=tolower(id)\n    ) on maintenanceConfigurationId\n    | project maintenanceConfigurationId, resourceId=tolower(tostring(JsonData.resourceId))\n) on resourceId\n| where isempty(maintenanceConfigurationId)\n| project recommendationId = \"3e115044-a3aa-433e-be01-ce17d67e50da\", name, id, tags, param1= strcat(\"sku-tier: \" , properties.sku.tier), param2=location\n\n"
+    "query": "// Azure Resource Graph Query\n// Find all ExpressRoute Virtual Network Gateways without Maintenance Configurations\n\nresources\n| where type =~ \"Microsoft.Network/virtualNetworkGateways\"\n| where properties.gatewayType =~ \"ExpressRoute\"\n| extend resourceId = tolower(id)\n| join kind=leftouter  (\n    maintenanceresources\n    | where type =~ \"Microsoft.Maintenance/configurationAssignments\"\n    | project JsonData = parse_json(properties)\n    | extend maintenanceConfigurationId = tolower(tostring(JsonData.maintenanceConfigurationId))\n    | join kind=inner (\n        resources\n        | where type =~ \"Microsoft.Maintenance/maintenanceConfigurations\"\n        | project maintenanceConfigurationId=tolower(id)\n    ) on maintenanceConfigurationId\n    | project maintenanceConfigurationId, resourceId=tolower(tostring(JsonData.resourceId))\n) on resourceId\n| where isempty(maintenanceConfigurationId)\n| project recommendationId = \"3e115044-a3aa-433e-be01-ce17d67e50da\", name, id, tags, param1= strcat(\"sku-tier: \" , properties.sku.tier), param2=location\n\n"
+  },
+  {
+    "aprlGuid": "f8c2e6d9-4b3a-45d6-b9e2-8e7f3a1c2d04",
+    "recommendationTypeId": null,
+    "recommendationMetadataState": "Active",
+    "learnMoreLink": [
+      {
+        "url": "https://learn.microsoft.com/azure/vpn-gateway/customer-controlled-gateway-maintenance",
+        "name": "Configure customer-controlled gateway maintenance for VPN Gateway"
+      }
+    ],
+    "recommendationControl": "HighAvailability",
+    "longDescription": "VPN gateways are updated for improved functionality, reliability, performance, and security. Customer-controlled maintenance configuration and scheduling minimize update impact and align with your maintenance windows.\n",
+    "pgVerified": false,
+    "description": "Configure customer-controlled VPN gateway maintenance",
+    "potentialBenefits": "Minimizes update impact",
+    "tags": [],
+    "recommendationResourceType": "Microsoft.Network/virtualNetworkGateways",
+    "recommendationImpact": "Medium",
+    "automationAvailable": true,
+    "query": "// Azure Resource Graph Query\n// Find all VPN Virtual Network Gateways without Maintenance Configurations\n\nresources\n| where type =~ \"Microsoft.Network/virtualNetworkGateways\"\n| where properties.gatewayType =~ \"Vpn\"\n| extend resourceId = tolower(id)\n| join kind=leftouter  (\n    maintenanceresources\n    | where type =~ \"Microsoft.Maintenance/configurationAssignments\"\n    | project JsonData = parse_json(properties)\n    | extend maintenanceConfigurationId = tolower(tostring(JsonData.maintenanceConfigurationId))\n    | join kind=inner (\n        resources\n        | where type =~ \"Microsoft.Maintenance/maintenanceConfigurations\"\n        | project maintenanceConfigurationId=tolower(id)\n    ) on maintenanceConfigurationId\n    | project maintenanceConfigurationId, resourceId=tolower(tostring(JsonData.resourceId))\n) on resourceId\n| where isempty(maintenanceConfigurationId)\n| project recommendationId = \"f8c2e6d9-4b3a-45d6-b9e2-8e7f3a1c2d04\", name, id, tags, param1= strcat(\"sku-tier: \" , properties.sku.tier), param2=location\n"
   },
   {
     "aprlGuid": "5b1933a6-90e4-f642-a01f-e58594e5aab2",
@@ -7073,7 +7052,7 @@
     "recommendationResourceType": "Microsoft.Compute/virtualMachineScaleSets",
     "recommendationImpact": "Low",
     "automationAvailable": true,
-    "query": "// Azure Resource Graph Query\n// Find VMSS instances associated with autoscale settings when predictiveAutoscalePolicy_scaleMode is disabled\nresources\n| where type == \"microsoft.compute/virtualmachinescalesets\"\n| where isempty(tostring(tags['aks-managed-poolName']))\n| project name, id, tags\n| join kind=leftouter  (\n    resources\n    | where type == \"microsoft.insights/autoscalesettings\"\n    | where tostring(properties.targetResourceUri) contains \"Microsoft.Compute/virtualMachineScaleSets\"\n    | project id = tostring(properties.targetResourceUri), autoscalesettings = properties\n) on id\n| where autoscalesettings.enabled == \"true\" and autoscalesettings.predictiveAutoscalePolicy.scaleMode == \"Disabled\"\n| project recommendationId = \"3f85a51c-e286-9f44-b4dc-51d00768696c\", name, id, tags, param1 = \"predictiveAutoscalePolicy_scaleMode: Disabled\"\n| order by id asc\n\n"
+    "query": "// Azure Resource Graph Query\n// Find VMSS instances associated with autoscale settings when predictiveAutoscalePolicy_scaleMode is disabled\nresources\n| where type == \"microsoft.compute/virtualmachinescalesets\"\n| where iff(isempty(tostring(tags['aks-managed-poolName'])), true, false)\n| project name, id=tolower(id), tags\n| join kind=leftouter (\nresources\n| where type == \"microsoft.insights/autoscalesettings\"\n| where tostring(properties.targetResourceUri) contains \"Microsoft.Compute/virtualMachineScaleSets\"\n| project id = tolower(tostring(properties.targetResourceUri)), autoscalesettings = properties\n) on id\n| where autoscalesettings.enabled == \"true\" and autoscalesettings.predictiveAutoscalePolicy.scaleMode == \"Disabled\"\n| project recommendationId = \"3f85a51c-e286-9f44-b4dc-51d00768696c\", name, id, tags, param1 = \"predictiveAutoscalePolicy_scaleMode: Disabled\"\n| order by id asc\n"
   },
   {
     "aprlGuid": "b5a63aa0-c58e-244f-b8a6-cbba0560a6db",
