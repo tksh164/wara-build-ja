@@ -25,17 +25,17 @@ jobs:
         run: |
           .github/scripts/Build-Recommendation-Object.ps1
 
-          - name: Commit and Push JSON
-          run: |
-            git config user.name "github-actions[bot]"
-            git config user.email "github-actions[bot]@users.noreply.github.com"
-            # Check if the file has changes
-            if [ -n "$(git status --porcelain docs/objects/recommendations.json)" ]; then
-              git add docs/objects/recommendations.json
-              git commit -m "Update recommendations.json"
-              git push
-            else
-              echo "No changes to commit"
-            fi
-          env:
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Commit and Push JSON
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          # Check if the file has changes
+          if [ -n "$(git status --porcelain docs/objects/recommendations.json)" ]; then
+            git add docs/objects/recommendations.json
+            git commit -m "Update recommendations.json"
+            git push
+          else
+            echo "No changes to commit"
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
