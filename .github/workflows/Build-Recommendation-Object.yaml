@@ -18,7 +18,7 @@ jobs:
 
       - name: Clone Another Repository
         run: |
-          git clone https://github.com/Azure/Azure-Proactive-Resiliency-Library-v2.git cloned-repo
+          git clone https://github.com/tksh164/aprl-v2-ja.git cloned-repo
 
       - name: Run PowerShell Script to Generate JSON
         shell: pwsh
