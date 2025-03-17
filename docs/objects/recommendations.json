@@ -1199,7 +1199,7 @@
   {
     "aprlGuid": "4a9d8973-6dba-0042-b3aa-07924877ebd5",
     "recommendationTypeId": null,
-    "recommendationMetadataState": "Active",
+    "recommendationMetadataState": "Disabled",
     "learnMoreLink": [
       {
         "name": "Azure Monitor エージェントの概要",
@@ -4385,6 +4385,27 @@
     "tags": [],
     "recommendationResourceType": "Microsoft.Network/privateDnsZones",
     "recommendationImpact": "Medium",
+    "automationAvailable": false,
+    "query": "// under-development\n\n"
+  },
+  {
+    "aprlGuid": "a2341513-2ab8-4aa1-b100-302e54640f18",
+    "recommendationTypeId": null,
+    "recommendationMetadataState": "Active",
+    "learnMoreLink": [
+      {
+        "name": "Azure Private DNS zone resiliency",
+        "url": "https://learn.microsoft.com/azure/dns/private-dns-resiliency"
+      }
+    ],
+    "recommendationControl": "HighAvailability",
+    "longDescription": "DNS private zones are resilient to regional outages because zone data is globally available. Resource records in a private zone are automatically replicated across regions. Linking a Private DNS Zone to VNETs in multiple regions increases availability and resiliency.\n",
+    "pgVerified": true,
+    "description": "Use virtual network links to link global Private DNS Zones to VNETs in two or more regions",
+    "potentialBenefits": "Ensures seamless failover for DNS during a regional outage",
+    "tags": [],
+    "recommendationResourceType": "Microsoft.Network/privateDnsZones",
+    "recommendationImpact": "High",
     "automationAvailable": false,
     "query": "// under-development\n\n"
   },
