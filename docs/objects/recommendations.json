@@ -430,9 +430,9 @@
       }
     ],
     "recommendationControl": "MonitoringAndAlerting",
-    "longDescription": "Monitoring the health of your Web Application Firewall and the applications it protects is crucial. This can be achieved through integration with Microsoft Defender for Cloud, Azure Monitor, and Azure Monitor logs, ensuring optimal performance and security.\n",
+    "longDescription": "Web Application Firewall とそれが保護するアプリケーションの正常性を監視することは非常に重要です。これは、Microsoft Defender for Cloud、Azure Monitor、Azure Monitor ログとの統合によって実現され、最適なパフォーマンスとセキュリティが確保されます。\n",
     "pgVerified": false,
-    "description": "Monitor Web Application Firewall",
+    "description": "Web アプリケーション ファイアウォールを監視する",
     "potentialBenefits": "Enhanced security and health insight",
     "tags": [],
     "recommendationResourceType": "Microsoft.Cdn/profiles",
