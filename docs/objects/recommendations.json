@@ -9383,6 +9383,190 @@
     "query": "// under-development\n\n"
   },
   {
+    "aprlGuid": "ccf0fece-27c7-4163-98ce-a1dd982d7f79",
+    "recommendationTypeId": null,
+    "recommendationMetadataState": "Active",
+    "learnMoreLink": [
+      {
+        "url": "https://learn.microsoft.com/azure/cloud-adoption-framework/scenarios/oracle-iaas/oracle-disaster-recovery-oracle-database-azure",
+        "name": "Business continuity and disaster recovery considerations for Oracle Database@Azure"
+      }
+    ],
+    "recommendationControl": "BusinessContinuity",
+    "longDescription": "Oracle Database@Azureは、高可用性を提供する Silver-level のリファレンス アーキテクチャに既定で従っているが、可用性ゾーンの障害に対して弱いです。 Gold-level では、自動化された Data Guard または手動セットアップにより、可用性ゾーン間での Data Guard レプリケーションが追加されます。 データ損失ゼロには SYNC を使用し、パフォーマンスが制約される場合は ASYNC を使用します。",
+    "pgVerified": false,
+    "description": "Oracle Data Guard レプリケーションを可用性ゾーンを横断して実装する",
+    "potentialBenefits": "Ensure business continuity in case of zonal failure.",
+    "tags": [
+      "ORACLE"
+    ],
+    "recommendationResourceType": "Microsoft.Subscription/subscriptions",
+    "recommendationImpact": "High",
+    "automationAvailable": "no",
+    "query": "// cannot-be-validated-with-arg\n"
+  },
+  {
+    "aprlGuid": "dfeb9c7a-7dae-4751-9625-b23a7160a3e1",
+    "recommendationTypeId": null,
+    "recommendationMetadataState": "Active",
+    "learnMoreLink": [
+      {
+        "url": "https://learn.microsoft.com/azure/cloud-adoption-framework/scenarios/oracle-iaas/oracle-disaster-recovery-oracle-database-azure",
+        "name": "Business continuity and disaster recovery considerations for Oracle Database@Azure"
+      }
+    ],
+    "recommendationControl": "DisasterRecovery",
+    "longDescription": "Oracle Database@Azure では Gold-level リファレンス アーキテクチャを推奨します。つまり、データベースの変更は、Data Guard (ASYNC レプリケーション) を介して、別のリージョンにあるセカンダリの Oracle Database@Azure インスタンスにレプリケートされます。",
+    "pgVerified": false,
+    "description": "ワークロード要件を満たすために Oracle に地域レプリケーション戦略を導入する",
+    "potentialBenefits": "The cloud MAA architecture achieves data protection and DR.",
+    "tags": [
+      "ORACLE"
+    ],
+    "recommendationResourceType": "Microsoft.Subscription/subscriptions",
+    "recommendationImpact": "High",
+    "automationAvailable": "no",
+    "query": "// cannot-be-validated-with-arg\n"
+  },
+  {
+    "aprlGuid": "0583239a-dfb5-44d4-94db-804bfc8e3bd1",
+    "recommendationTypeId": null,
+    "recommendationMetadataState": "Active",
+    "learnMoreLink": [
+      {
+        "url": "https://learn.microsoft.com/azure/cloud-adoption-framework/scenarios/oracle-iaas/oracle-disaster-recovery-oracle-database-azure",
+        "name": "Business continuity and disaster recovery considerations for Oracle Database@Azure"
+      }
+    ],
+    "recommendationControl": "DisasterRecovery",
+    "longDescription": "データ保護のために、Azure で Autonomous Recovery Service への OCI 管理バックアップを有効にします。\nAutonomous Recovery Service は自動化されたポリシーベースのバックアップを提供し、継続的な検証を行います。\n",
+    "pgVerified": false,
+    "description": "ODAA バックアップ戦略のために Azure で Autonomous Recovery Service を実装する",
+    "potentialBenefits": "Provide workload data protection.",
+    "tags": [
+      "ORACLE"
+    ],
+    "recommendationResourceType": "Microsoft.Subscription/subscriptions",
+    "recommendationImpact": "High",
+    "automationAvailable": "no",
+    "query": "// cannot-be-validated-with-arg\n"
+  },
+  {
+    "aprlGuid": "2322a597-a6af-4c3e-a1b1-d1b1ddead508",
+    "recommendationTypeId": null,
+    "recommendationMetadataState": "Active",
+    "learnMoreLink": [
+      {
+        "url": "https://learn.microsoft.com/azure/cloud-adoption-framework/scenarios/oracle-iaas/oracle-manage-monitor-oracle-database-azure",
+        "name": "Learn about Manage and monitor Oracle Database@Azure"
+      }
+    ],
+    "recommendationControl": "Scalability",
+    "longDescription": "Azure Monitor で CPU 使用率やメモリ使用量などのデータベース メトリクスを監視し、スケーリングを決定するためのアラートを設定します。\nOracle Exadata Database@Azure では、自動スケーリングは利用できません。\n必要に応じて、Exa インフラストラクチャの容量が許すなら、VM クラスター上の OCPU をスケーリングします。\n",
+    "pgVerified": false,
+    "description": "Oracle Database の重要なメトリクスを定義されたしきい値で監視し、それに基づいてスケーリングする",
+    "potentialBenefits": "Meet workload scalability requirements.",
+    "tags": [
+      "ORACLE"
+    ],
+    "recommendationResourceType": "Microsoft.Subscription/subscriptions",
+    "recommendationImpact": "Medium",
+    "automationAvailable": "no",
+    "query": "// cannot-be-validated-with-arg\n"
+  },
+  {
+    "aprlGuid": "1bfdf86c-f501-4ad9-99a7-b29b736f34dc",
+    "recommendationTypeId": null,
+    "recommendationMetadataState": "Active",
+    "learnMoreLink": [
+      {
+        "url": "https://learn.microsoft.com/azure/cloud-adoption-framework/scenarios/oracle-iaas/oracle-capacity-planning-oracle-database-azure",
+        "name": "Capacity planning for Oracle Database@Azure"
+      }
+    ],
+    "recommendationControl": "OtherBestPractices",
+    "longDescription": "競合を防止し、可用性を確保するために、現在および将来の Oracle ワークロードのニーズを考慮して IP アドレス割り当てスキームを設計します。\nプライマリ、スタンバイ、クライアント、およびバックアップの各サブネットは、信頼性の高い接続のために重複しない CIDR 範囲を持つ必要があります。\n",
+    "pgVerified": false,
+    "description": "現在および将来の要件を満たす IP アドレス戦略を計画し、実装する",
+    "potentialBenefits": "Avoid conflicts in IP addressing.",
+    "tags": [
+      "ORACLE"
+    ],
+    "recommendationResourceType": "Microsoft.Subscription/subscriptions",
+    "recommendationImpact": "Medium",
+    "automationAvailable": "no",
+    "query": "// cannot-be-validated-with-arg\n"
+  },
+  {
+    "aprlGuid": "768a5b06-41d4-4f10-b544-fbd2f6999af4",
+    "recommendationTypeId": null,
+    "recommendationMetadataState": "Active",
+    "learnMoreLink": [
+      {
+        "url": "https://learn.microsoft.com/azure/cloud-adoption-framework/scenarios/oracle-iaas/oracle-disaster-recovery-oracle-database-azure",
+        "name": "Business continuity and disaster recovery considerations for Oracle Database@Azure"
+      }
+    ],
+    "recommendationControl": "BusinessContinuity",
+    "longDescription": "異なる可用性ゾーンに Data Guard オブザーバー ノードを配置し、本番環境に何かあった場合でもオブザーバー ノードが利用可能であることを確認します。\n",
+    "pgVerified": false,
+    "description": "Data Guard オブザーバーを異なる可用性ゾーンにデプロイして高可用性を実現する",
+    "potentialBenefits": "Data Guard observer automates database failover.",
+    "tags": [
+      "ORACLE"
+    ],
+    "recommendationResourceType": "Microsoft.Subscription/subscriptions",
+    "recommendationImpact": "High",
+    "automationAvailable": "no",
+    "query": "// cannot-be-validated-with-arg\n"
+  },
+  {
+    "aprlGuid": "bbe4014f-c49d-475d-9c48-76cb3c190483",
+    "recommendationTypeId": null,
+    "recommendationMetadataState": "Active",
+    "learnMoreLink": [
+      {
+        "url": "https://learn.microsoft.com/azure/cloud-adoption-framework/scenarios/oracle-iaas/oracle-security-overview-odaa",
+        "name": "Security guidelines for Oracle Database@Azure"
+      }
+    ],
+    "recommendationControl": "HighAvailability",
+    "longDescription": "Oracle Key Vault として使用される VM に冗長性を持たせます。これは、顧客が独自キーを使用し、OCI vault を使用しない場合にのみ関連することに注意します。BCDR アーキテクチャに合わせ、2 つの可用性ゾーンまたはリージョンに、最低 4 ノードの Oracle Key Vault クラスターをデプロイすることを推奨します。\n",
+    "pgVerified": false,
+    "description": "顧客管理暗号キー用に可用性の高いクラスターに Oracle Key Vault をセットアップする",
+    "potentialBenefits": "Protect access to keys in case of VM or AZ/region failure.",
+    "tags": [
+      "ORACLE"
+    ],
+    "recommendationResourceType": "Microsoft.Subscription/subscriptions",
+    "recommendationImpact": "High",
+    "automationAvailable": "no",
+    "query": "// cannot-be-validated-with-arg\n"
+  },
+  {
+    "aprlGuid": "02bfe908-d958-451a-a603-bef8277ae56a",
+    "recommendationTypeId": null,
+    "recommendationMetadataState": "Active",
+    "learnMoreLink": [
+      {
+        "url": "https://docs.oracle.com/ja-jp/iaas/exadatacloud/doc/exa-conf-oracle-man-infra.html",
+        "name": "Oracle 管理インフラストラクチャ メンテナンスの構成"
+      }
+    ],
+    "recommendationControl": "OtherBestPractices",
+    "longDescription": "ローリング方式ではないメンテナンスにはダウンタイムが発生します。\nインフラストラクチャの自動メンテナンスは四半期ごとに行われ、Oracle はその日時を数週間前に通知します。メンテナンスが開始される前に、スケジュールされた日時を変更することができます。\n",
+    "pgVerified": false,
+    "description": "Oracle Database@Azure インフラストラクチャがローリング方式で更新されるようにする",
+    "potentialBenefits": "Keep Oracle workloads up-to-date.",
+    "tags": [
+      "ORACLE"
+    ],
+    "recommendationResourceType": "Microsoft.Subscription/subscriptions",
+    "recommendationImpact": "High",
+    "automationAvailable": "no",
+    "query": "// cannot-be-validated-with-arg\n"
+  },
+  {
     "aprlGuid": "8c0a0a4c-9e34-41af-9f6d-89d8dc00370e",
     "recommendationTypeId": null,
     "recommendationMetadataState": "Active",
