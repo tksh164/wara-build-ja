@@ -1261,7 +1261,7 @@
   },
   {
     "aprlGuid": "c72b7fee-1fa0-5b4b-98e5-54bcae95bb74",
-    "recommendationTypeId": null,
+    "recommendationTypeId": "e82f5b61-b0f8-48e7-8e18-5aa1f57bff81",
     "recommendationMetadataState": "Active",
     "learnMoreLink": [
       {
@@ -2458,7 +2458,7 @@
   },
   {
     "aprlGuid": "621dbc78-3745-4d32-8eac-9e65b27b7512",
-    "recommendationTypeId": null,
+    "recommendationTypeId": "796b9be0-487d-4daa-8771-f08e4d7c9c0c",
     "recommendationMetadataState": "Active",
     "learnMoreLink": [
       {
@@ -5608,7 +5608,7 @@
   },
   {
     "aprlGuid": "ca87914f-aac4-4783-ab67-82a6f936f194",
-    "recommendationTypeId": null,
+    "recommendationTypeId": "80b4e93c-4500-4fbd-bd6f-3ec245f72be9",
     "recommendationMetadataState": "Active",
     "learnMoreLink": [
       {
