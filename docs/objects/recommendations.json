@@ -128,7 +128,7 @@
   {
     "aprlGuid": "7e7daec9-6a81-3546-a4cc-9aef72fec1f7",
     "recommendationTypeId": null,
-    "recommendationMetadataState": "Active",
+    "recommendationMetadataState": "Disabled",
     "learnMoreLink": [
       {
         "url": "https://learn.microsoft.com/azure/azure-monitor/insights/azure-sql#analyze-data-and-create-alerts",
@@ -2219,27 +2219,6 @@
     "pgVerified": true,
     "description": "プライベート DNS ゾーンの正常性を監視し、アラートを設定する",
     "potentialBenefits": "Enhanced DNS reliability and alerting",
-    "tags": [],
-    "recommendationResourceType": "Microsoft.Network/privateDnsZones",
-    "recommendationImpact": "Medium",
-    "automationAvailable": false,
-    "query": "// under-development\n\n"
-  },
-  {
-    "aprlGuid": "1e02335c-1f90-fd4e-a5a5-d359c7b22d70",
-    "recommendationTypeId": null,
-    "recommendationMetadataState": "Active",
-    "learnMoreLink": [
-      {
-        "url": "https://learn.microsoft.com/azure/cloud-adoption-framework/ready/azure-best-practices/private-link-and-dns-integration-at-scale",
-        "name": "Private Link と DNS の大規模な統合"
-      }
-    ],
-    "recommendationControl": "DisasterRecovery",
-    "longDescription": "復旧時間目標 (RTO) が低い事業継続シナリオの場合、リージョンごとに本番環境と災害復旧環境 (DR) のプライベート DNS ゾーンを構成し、ワークロードとリソースの DNS エントリが同一であることを確認します。これにより、両方のゾーンで DNS 解決の一貫性が保たれます。\n",
-    "pgVerified": true,
-    "description": "低い復旧時間目標 (RTO) 要件がある場合は、リージョンごとのプライベート DNS ゾーンを使用する",
-    "potentialBenefits": "Ensures seamless failover for DNS during a regional outage",
     "tags": [],
     "recommendationResourceType": "Microsoft.Network/privateDnsZones",
     "recommendationImpact": "Medium",
