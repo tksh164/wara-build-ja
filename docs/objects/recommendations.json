@@ -2307,7 +2307,7 @@
     "recommendationResourceType": "Microsoft.Network/loadBalancers",
     "recommendationImpact": "High",
     "automationAvailable": true,
-    "query": "// Azure Resource Graph Query\n// Find all LoadBalancers with only 1 VM in any backend pool\nresources\n| where type =~ 'Microsoft.Network/loadBalancers'\n| mv-expand bpool = properties.backendAddressPools\n| extend BackendAddresses = array_length(bpool.properties.loadBalancerBackendAddresses)\n| where BackendAddresses <= 1\n| extend lbId = id, lbName = name, poolName = tostring(bpool.name)\n| summarize anyPool = any(poolName), anyTags = any(tags) by lbId, lbName\n| project recommendationId = \"6d82d042-6d61-ad49-86f0-6a5455398081\", name = lbName, id = lbId, tags = anyTags, param1 = strcat(\"backendPoolName: \", anyPool)\n"
+    "query": "// Azure Resource Graph Query\n// Find all LoadBalancers with only 1 VM in any backend pool\nresources\n| where type =~ 'Microsoft.Network/loadBalancers'\n| mv-expand bpool = properties.backendAddressPools\n| extend BackendAddresses = array_length(bpool.properties.loadBalancerBackendAddresses)\n| where BackendAddresses <= 1\n| extend lbId = id, lbName = name, poolName = tostring(bpool.name), lbTags = tostring(tags)\n| summarize impactedPools = make_list(poolName) by lbId, lbName, lbTags\n| project recommendationId = \"6d82d042-6d61-ad49-86f0-6a5455398081\",name = lbName,id = lbId,tags = lbTags,param1 = strcat(\"backendPoolNames: \", strcat_array(impactedPools, \", \"))\n"
   },
   {
     "aprlGuid": "8d319a05-677b-944f-b9b4-ca0fb42e883c",
@@ -5481,6 +5481,48 @@
     "query": "// Azure Resource Graph Query\n// Provides a list of Service Bus Namespace resources that have the lower minimum TLS version.\nresources\n| where type =~ \"Microsoft.ServiceBus/namespaces\"\n| where properties.minimumTlsVersion in (\"1.0\", \"1.1\")\n| project\n    recommendationId = \"f075a1bd-de9e-4819-9a1d-1ac41037a74f\",\n    name,\n    id,\n    tags,\n    param1 = strcat(\"minimumTlsVersion: \", properties.minimumTlsVersion)\n"
   },
   {
+    "aprlGuid": "4b33324a-70cd-4bac-bdae-da4c382c436b",
+    "recommendationTypeId": null,
+    "recommendationMetadataState": "Active",
+    "learnMoreLink": [
+      {
+        "url": "https://learn.microsoft.com/rest/api/oracle/cloud-vm-clusters/get?view=rest-oracle-2023-09-01&tabs=HTTP#cloudvmclusterlifecyclestate",
+        "name": "Cloud VM Cluster lifecycle"
+      }
+    ],
+    "recommendationControl": "OtherBestPractices",
+    "longDescription": "ODAA Vm Clusters can be in a number of states during their lifecycle (Available, Failed, Maintenance In Progress, Provisioning, Terminated, Terminating and Updating).\nEnsure that the ODAA clusters are in Available state under normal operations.\n",
+    "pgVerified": false,
+    "description": "Ensure ODAA clusters are in Available state under normal operations",
+    "potentialBenefits": "Ensure service is available",
+    "tags": [],
+    "recommendationResourceType": "Oracle.Database/cloudVmClusters",
+    "recommendationImpact": "High",
+    "automationAvailable": false,
+    "query": "// under-development\n"
+  },
+  {
+    "aprlGuid": "c99d730b-8754-447f-bd5d-3e8850a12235",
+    "recommendationTypeId": null,
+    "recommendationMetadataState": "Active",
+    "learnMoreLink": [
+      {
+        "url": "https://learn.microsoft.com/rest/api/oracle/cloud-exadata-infrastructures/get?view=rest-oracle-2023-09-01&tabs=HTTP#cloudexadatainfrastructurelifecyclestate",
+        "name": "Cloud Exadata infrastructure lifecycle"
+      }
+    ],
+    "recommendationControl": "OtherBestPractices",
+    "longDescription": "ODAA Exadata infrastructures can be in a number of states during its lifecycle (Available, Failed, Maintenance In Progress, Provisioning, Terminated, Terminating and Updating).\nEnsure that the infrastructure is in Available state under normal operations.\n",
+    "pgVerified": false,
+    "description": "Ensure ODAA infrastructure is in Available state under normal operations",
+    "potentialBenefits": "Ensure service is available",
+    "tags": [],
+    "recommendationResourceType": "Oracle.Database/cloudExadataInfrastructures",
+    "recommendationImpact": "High",
+    "automationAvailable": false,
+    "query": "// under-development\n"
+  },
+  {
     "aprlGuid": "1ceea4b5-1d8b-4be0-9bbe-9594557be51a",
     "recommendationTypeId": null,
     "recommendationMetadataState": "Active",
@@ -7789,7 +7831,7 @@
     ],
     "recommendationResourceType": "Microsoft.Subscription/subscriptions",
     "recommendationImpact": "High",
-    "automationAvailable": "no",
+    "automationAvailable": false,
     "query": "// cannot-be-validated-with-arg\n"
   },
   {
@@ -7812,7 +7854,7 @@
     ],
     "recommendationResourceType": "Microsoft.Subscription/subscriptions",
     "recommendationImpact": "High",
-    "automationAvailable": "no",
+    "automationAvailable": false,
     "query": "// cannot-be-validated-with-arg\n"
   },
   {
@@ -7835,7 +7877,7 @@
     ],
     "recommendationResourceType": "Microsoft.Subscription/subscriptions",
     "recommendationImpact": "High",
-    "automationAvailable": "no",
+    "automationAvailable": false,
     "query": "// cannot-be-validated-with-arg\n"
   },
   {
@@ -7858,7 +7900,7 @@
     ],
     "recommendationResourceType": "Microsoft.Subscription/subscriptions",
     "recommendationImpact": "Medium",
-    "automationAvailable": "no",
+    "automationAvailable": false,
     "query": "// cannot-be-validated-with-arg\n"
   },
   {
@@ -7881,7 +7923,7 @@
     ],
     "recommendationResourceType": "Microsoft.Subscription/subscriptions",
     "recommendationImpact": "Medium",
-    "automationAvailable": "no",
+    "automationAvailable": false,
     "query": "// cannot-be-validated-with-arg\n"
   },
   {
@@ -7904,7 +7946,7 @@
     ],
     "recommendationResourceType": "Microsoft.Subscription/subscriptions",
     "recommendationImpact": "High",
-    "automationAvailable": "no",
+    "automationAvailable": false,
     "query": "// cannot-be-validated-with-arg\n"
   },
   {
@@ -7927,7 +7969,7 @@
     ],
     "recommendationResourceType": "Microsoft.Subscription/subscriptions",
     "recommendationImpact": "High",
-    "automationAvailable": "no",
+    "automationAvailable": false,
     "query": "// cannot-be-validated-with-arg\n"
   },
   {
@@ -7950,7 +7992,7 @@
     ],
     "recommendationResourceType": "Microsoft.Subscription/subscriptions",
     "recommendationImpact": "High",
-    "automationAvailable": "no",
+    "automationAvailable": false,
     "query": "// cannot-be-validated-with-arg\n"
   },
   {
