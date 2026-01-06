@@ -732,7 +732,7 @@
     "recommendationResourceType": "Microsoft.Compute/virtualMachines",
     "recommendationImpact": "Low",
     "automationAvailable": true,
-    "query": "// Azure Resource Graph Query\n// Find all VM NICs that have Accelerated Networking enabled\nresources\n| where type =~ 'Microsoft.Compute/virtualMachines'\n| mv-expand nic = properties.networkProfile.networkInterfaces\n| project name, id, tags, lowerCaseNicId = tolower(nic.id), vmSize = tostring(properties.hardwareProfile.vmSize)\n| join kind = inner (\n    resources\n    | where type =~ 'Microsoft.Network/networkInterfaces'\n    | where properties.enableAcceleratedNetworking == true\n    | project nicName = split(id, \"/\")[8], lowerCaseNicId = tolower(id)\n    )\n    on lowerCaseNicId\n| summarize nicNames = make_set(nicName) by name, id, tostring(tags), vmSize\n| extend param2 = strcat(\"NicName: \", strcat_array(nicNames, \", \")), param3 = strcat(\"VMSize: \", vmSize)\n| project recommendationId = \"dfedbeb1-1519-fc47-86a5-52f96cf07105\", name, id, tags, param1=\"This machine has AccelNet enabled, but it is not possible to confirm if the GuestOS drivers are Up-to-Date.\", param2,param3\n| order by id asc\n\n"
+    "query": "// Azure Resource Graph Query\n// Find all VM NICs that have Accelerated Networking enabled\nresources\n| where type =~ 'Microsoft.Compute/virtualMachines'\n| mv-expand nic = properties.networkProfile.networkInterfaces\n| project name, id, tags, lowerCaseNicId = tolower(nic.id), vmSize = tostring(properties.hardwareProfile.vmSize)\n| join kind = inner (\n    resources\n    | where type =~ 'Microsoft.Network/networkInterfaces'\n    | where properties.enableAcceleratedNetworking == true\n    | project nicName = split(id, \"/\")[8], lowerCaseNicId = tolower(id)\n    )\n    on lowerCaseNicId\n| summarize nicNames = make_set(nicName) by name, id, tostring(tags), vmSize\n| extend param2 = strcat(\"NicName: \", strcat_array(nicNames, \", \")), param3 = strcat(\"VMSize: \", vmSize)\n| project recommendationId = \"73d1bb04-7d3e-0d47-bc0d-63afe773b5fe\", name, id, tags, param1=\"This machine has AccelNet enabled, but it is not possible to confirm if the GuestOS drivers are Up-to-Date.\", param2,param3\n| order by id asc\n\n"
   },
   {
     "aprlGuid": "41a22a5e-5e08-9647-92d0-2ffe9ef1bdad",
@@ -1555,7 +1555,7 @@
   },
   {
     "aprlGuid": "b2113023-a553-2e41-9789-597e2fb54c31",
-    "recommendationTypeId": null,
+    "recommendationTypeId": "dc298556-8232-4aa8-bfe0-5204c5017be0",
     "recommendationMetadataState": "Active",
     "learnMoreLink": [
       {
@@ -1639,7 +1639,7 @@
   },
   {
     "aprlGuid": "855ca19a-6518-4f2e-9e5a-01796fbca9f8",
-    "recommendationTypeId": null,
+    "recommendationTypeId": "e987dcce-fd2c-4683-8abf-f1a34bbad737",
     "recommendationMetadataState": "Active",
     "learnMoreLink": [
       {
@@ -3036,13 +3036,13 @@
     "recommendationControl": "OtherBestPractices",
     "longDescription": "Citrix Managed Azure サブスクリプションは、Cloud Connector などの他のマシンを除き、アプリ/デスクトップ配信用の VDA を備えた仮想マシンをサポートします。制限に近づいたら、ダッシュボード通知で通知され、十分なライセンスがある場合は、別のサブスクリプションを要求します。カタログに指定された制限を超えることはできません。\n",
     "pgVerified": true,
-    "description": "サブスクリプションごとに 2,000 を超える Citrix VDA サーバーを作成しない",
+    "description": "サブスクリプションごとに 4,000 を超える Citrix VDA サーバーを作成しない",
     "potentialBenefits": "Avoids hitting limit, ensures reliability",
     "tags": [],
     "recommendationResourceType": "Microsoft.Subscription/Subscriptions",
     "recommendationImpact": "High",
     "automationAvailable": true,
-    "query": "// Azure Resource Graph Query\n// Count VM instances with a tag that contains \"Citrix VDA\" and create output if that count is >2000 for each subscription.\n// The Citrix published limit is 2500. This query runs an 80% check.\n\nresources\n| where type == 'microsoft.compute/virtualmachines'\n| where tags contains 'Citrix VDA'\n| summarize VMs=count() by subscriptionId\n| where VMs > 2000\n| join (resourcecontainers| where type =='microsoft.resources/subscriptions' | project subname=name, subscriptionId) on subscriptionId\n| project recommendationId='c041d596-6c97-4c5f-b4b3-9cd37628f2e2', name= subname, id = subscriptionId, param1='Too many instances.', param2= VMs\n\n"
+    "query": "// Azure Resource Graph Query\n// Count VM instances with a tag that contains \"Citrix VDA\" and create output if that count is >4000 for each subscription.\n// The Citrix published limit is 5000. This query runs an 80% check.\n\nresources\n| where type == 'microsoft.compute/virtualmachines'\n| where tags contains 'Citrix VDA'\n| summarize VMs=count() by subscriptionId\n| where VMs > 4000\n| join (resourcecontainers| where type =='microsoft.resources/subscriptions' | project subname=name, subscriptionId) on subscriptionId\n| project recommendationId='c041d596-6c97-4c5f-b4b3-9cd37628f2e2', name= subname, id = subscriptionId, param1='Too many instances.', param2= VMs\n\n"
   },
   {
     "aprlGuid": "5ada5ffa-7149-4e49-9fbf-e67be7c2594c",
@@ -3462,7 +3462,7 @@
     "recommendationResourceType": "Oracle.Database/cloudExadataInfrastructures",
     "recommendationImpact": "High",
     "automationAvailable": false,
-    "query": "// under-development\n"
+    "query": "// Azure Resource Graph Query\n// This resource graph query will return rows if Oracle Database@Azure Infrastructure life cycle state is not Available\nresources\n| where type == \"oracle.database/cloudexadatainfrastructures\"\n| where properties.lifecycleState !~ \"Available\"\n| project recommendationId = \"c99d730b-8754-447f-bd5d-3e8850a12235\",id=tostring(id),name,tags, param1 = \"ODAAInfraAvail: False\"\n"
   },
   {
     "aprlGuid": "4b33324a-70cd-4bac-bdae-da4c382c436b",
@@ -3483,7 +3483,7 @@
     "recommendationResourceType": "Oracle.Database/cloudVmClusters",
     "recommendationImpact": "High",
     "automationAvailable": false,
-    "query": "// under-development\n"
+    "query": "// Azure Resource Graph Query\n// This resource graph query will return rows if Oracle Database@Azure Cluster life cycle state is not Available\nresources\n| where type == \"oracle.database/cloudvmclusters\"\n| where properties.lifecycleState !~ \"Available\"\n| project recommendationId = \"4b33324a-70cd-4bac-bdae-da4c382c436b\",id=tostring(id),name,tags, param1 = \"ODAAClusterAvail: False\"\n"
   },
   {
     "aprlGuid": "b36fd2ac-dd83-664a-ab48-ff7b8d3b189d",
@@ -3861,7 +3861,7 @@
     "recommendationResourceType": "Microsoft.Network/networkWatchers",
     "recommendationImpact": "Low",
     "automationAvailable": false,
-    "query": "// under-development\n"
+    "query": "// Azure Resource Graph Query\n// This query will return all regions for which Network Watcher is not deployed\nResources\n| where location <> 'global'\n| summarize by location, subscriptionId\n| project location, subscriptionId\n| join kind = leftouter (\n    resources\n    | where type =~ \"microsoft.network/networkwatchers\"\n    | summarize by location, subscriptionId\n    | project nwlocation = location, nwsubscriptionId = subscriptionId\n    )  on $left.location == $right.nwlocation,\n    $left.subscriptionId == $right.nwsubscriptionId\n    | where isnull(nwlocation) or isempty(nwlocation)\n    | project recommendationId = \"4e133bd0-8762-bc40-a95b-b29142427d73\", name = strcat('NetworkWatcher_',location) , id=subscriptionId, tags='', param1 = strcat(\"missingLocation: \", location)\n"
   },
   {
     "aprlGuid": "22a769ed-0ecb-8b49-bafe-8f52e6373d9c",
@@ -3903,7 +3903,7 @@
     "recommendationResourceType": "Microsoft.Network/networkWatchers",
     "recommendationImpact": "Medium",
     "automationAvailable": false,
-    "query": "// under-development\n"
+    "query": "// Azure Resource Graph Query\n// This query will return all regions for which Network Watcher is deployed but Connection Monitor is not deployed\nResources\n    | where type =~ \"microsoft.network/networkwatchers\"\n    | summarize by location, subscriptionId, name, id\n| join kind = leftouter (\nresources\n| where type =~ 'microsoft.network/networkwatchers/connectionmonitors'\n| summarize by location, subscriptionId\n    | project nwlocation = location, nwsubscriptionId = subscriptionId\n    )  on $left.location == $right.nwlocation,\n    $left.subscriptionId == $right.nwsubscriptionId\n      | where isnull(nwlocation) or isempty(nwlocation)\n| project recommendationId = \"1e28bbc1-1eb7-486f-8d7f-93943f40219c\", name, id, tags=''\n"
   },
   {
     "aprlGuid": "bf0b7dbd-016d-458c-af99-70fcb03ad451",
@@ -4453,7 +4453,7 @@
   },
   {
     "aprlGuid": "3e115044-a3aa-433e-be01-ce17d67e50da",
-    "recommendationTypeId": null,
+    "recommendationTypeId": "b4af9e04-3570-41f1-b4cf-b7af07224799",
     "recommendationMetadataState": "Active",
     "learnMoreLink": [
       {
@@ -4936,7 +4936,7 @@
   },
   {
     "aprlGuid": "8364fd0a-7c0e-e240-9d95-4bf965aec243",
-    "recommendationTypeId": null,
+    "recommendationTypeId": "ef4da732-f541-4109-bc0e-465c68b6c7eb",
     "recommendationMetadataState": "Active",
     "learnMoreLink": [
       {
@@ -4945,15 +4945,15 @@
       }
     ],
     "recommendationControl": "OtherBestPractices",
-    "longDescription": "Application Gateway v2 (Standard_v2 または WAF_v2 SKU) では、最大 125 個のインスタンスをサポートできます。/24 サブネットはデプロイに必須ではありませんが、自動スケーリングとメンテナンスのアップグレードに十分な領域を提供することをお勧めします。\n",
+    "longDescription": "Application Gateway v2 (Standard_v2 または WAF_v2 SKU) では、最大 125 個のインスタンスをサポートできます (125 インスタンス IP アドレス + 1 プライベート フロントエンド IP 構成 + 5 Azure 予約)。/24 サブネットはデプロイに必須ではありませんが、自動スケーリングとメンテナンスのアップグレードに十分な領域を提供することをお勧めします。\n",
     "pgVerified": true,
-    "description": "Application Gateway サブネットが /24 サブネット マスクを使用していることを確認する",
+    "description": "Application Gateway v2 のサブネットに /24 のサブネット マスクを使用していることを確認する",
     "potentialBenefits": "Allows autoscaling and maintenance",
     "tags": [],
     "recommendationResourceType": "Microsoft.Network/applicationGateways",
     "recommendationImpact": "High",
     "automationAvailable": true,
-    "query": "// Azure Resource Graph Query\n// This query will validate the subnet id for an appGW ends with a /24\n\nresources\n| where type =~ 'Microsoft.Network/applicationGateways'\n| extend subnetid = tostring(properties.gatewayIPConfigurations[0].properties.subnet.id)\n| join kind=leftouter(resources\n    | where type == \"microsoft.network/virtualnetworks\"\n    | mv-expand properties.subnets\n    | extend subnetid = tostring(properties_subnets.id)\n    | extend addressprefix = tostring(properties_subnets.properties.addressPrefix)\n    | project subnetid, addressprefix) on subnetid\n| where addressprefix !endswith '/24'\n| project recommendationId = \"8364fd0a-7c0e-e240-9d95-4bf965aec243\", name, id, tags, param1 = strcat('AppGW subnet prefix: ', addressprefix)\n\n"
+    "query": "// Azure Resource Graph Query\n// This query will validate the subnet id for an appGW ends with a /24\nresources\n| where type == \"microsoft.network/applicationgateways\"\n| extend subnetId = tostring(properties.gatewayIPConfigurations[0].properties.subnet.id)\n| project id, subscriptionId, subnetId, name, tags\n| join (\n    resources\n    | where type == \"microsoft.network/virtualnetworks\"\n    | project id, subnets = properties.subnets\n    | mv-expand subnets\n    | mv-expand subnets.properties.addressPrefixes\n    | project\n        id,\n        subnetId = tostring(subnets.id),\n        prefix1 = subnets.properties.addressPrefix,\n        prefix2 = subnets.properties.addressPrefixes\n    | mv-expand prefix2\n    | extend prefix = iff(isnotnull(prefix1), prefix1, prefix2)\n    | extend subnetPrefixLength = split(prefix, \"/\")[1]\n) on subnetId\n| where subnetPrefixLength > 24 and subnetPrefixLength != 64\n| project recommendationId = \"8364fd0a-7c0e-e240-9d95-4bf965aec243\",name,id,tags,param1 = strcat(\"AppGW subnet prefix: \", prefix)\n"
   },
   {
     "aprlGuid": "60077378-7cb1-4b35-89bb-393884d9921d",
@@ -5314,7 +5314,7 @@
   },
   {
     "aprlGuid": "38c3bca1-97a1-eb42-8cd3-838b243f35ba",
-    "recommendationTypeId": null,
+    "recommendationTypeId": "332e07de-da0d-4ee7-b1c4-ca9016005e1d",
     "recommendationMetadataState": "Active",
     "learnMoreLink": [
       {
@@ -5335,7 +5335,7 @@
   },
   {
     "aprlGuid": "6d82d042-6d61-ad49-86f0-6a5455398081",
-    "recommendationTypeId": null,
+    "recommendationTypeId": "5b132ebc-bd86-46fc-b2ee-95bc3e2d3017",
     "recommendationMetadataState": "Active",
     "learnMoreLink": [
       {
@@ -5457,7 +5457,7 @@
     "recommendationResourceType": "Microsoft.Network/privateDnsZones",
     "recommendationImpact": "Medium",
     "automationAvailable": false,
-    "query": "// under-development\n\n"
+    "query": "// Azure Resource Graph Query\n// This query will return Time-To-Live (TTL) for the DNS recordsets. Make sure it is set appropriately to ensure RTOs\ndnsresources\n| project recommendationId = \"3538aa48-c40b-455b-a93b-269fe6e65be2\", name, id, tags, param1 = strcat(\"Time-To-Live: \", tostring(properties.ttl))\n"
   },
   {
     "aprlGuid": "a2341513-2ab8-4aa1-b100-302e54640f18",
@@ -6254,8 +6254,8 @@
     "tags": [],
     "recommendationResourceType": "Microsoft.ContainerService/managedClusters",
     "recommendationImpact": "High",
-    "automationAvailable": false,
-    "query": "// cannot-be-validated-with-arg\n\n"
+    "automationAvailable": true,
+    "query": "// Azure Resource Graph Query\n// Detects AKS clusters (Microsoft.ContainerService/managedClusters) where one or more of the CSI drivers (disk, file, blob) are not enabled.\n// This matches the recommendation to upgrade persistent volumes using in-tree drivers to Azure CSI drivers.\n\nresources\n| where type =~ 'Microsoft.ContainerService/managedClusters'\n| where properties.storageProfile.diskCSIDriver.enabled != true or\n        properties.storageProfile.fileCSIDriver.enabled != true or\n        properties.storageProfile.blobCSIDriver.enabled != true\n| project recommendationId = 'b002c030-72e6-4a37-8217-1cb276c43169', name, id, tags\n\n"
   },
   {
     "aprlGuid": "9a1c17e5-c9a0-43db-b920-adaf54d1bcb7",
@@ -6457,7 +6457,7 @@
       }
     ],
     "recommendationControl": "HighAvailability",
-    "longDescription": "システム ノード プールは、重要なシステム ポッドがノードの停止に対して回復力を持つように、最小ノード数を 2 に設定する必要があります。\n",
+    "longDescription": "システム ノード プールは、重要なシステム ポッドがノードの停止に対して回復力を持つように、最小ノード数を 3 に設定する必要があります。\n",
     "pgVerified": true,
     "description": "システム ノード プール数を構成する",
     "potentialBenefits": "Ensures pod resilience",
@@ -6465,7 +6465,7 @@
     "recommendationResourceType": "Microsoft.ContainerService/managedClusters",
     "recommendationImpact": "High",
     "automationAvailable": true,
-    "query": "// Azure Resource Graph Query\n// Returns each AKS cluster with nodepools that have system nodepools with less than 2 nodes\nresources\n| where type == \"microsoft.containerservice/managedclusters\"\n| mv-expand agentPoolProfile = properties.agentPoolProfiles\n| extend taints = tostring(parse_json(agentPoolProfile.nodeTaints))\n| extend nodePool = tostring(parse_json(agentPoolProfile.name))\n| where taints has \"CriticalAddonsOnly=true:NoSchedule\" and  agentPoolProfile.minCount < 2\n| project recommendationId=\"7f7ae535-a5ba-4665-b7e0-c451dbdda01f\", name, id, tags, param1=strcat(\"nodePoolName: \", nodePool), param2=strcat(\"nodePoolMinNodeCount: \", agentPoolProfile.minCount)\n\n"
+    "query": "// Azure Resource Graph Query\n// Returns each AKS cluster with nodepools that have system nodepools with less than 2 nodes\nresources\n| where type == \"microsoft.containerservice/managedclusters\"\n| mv-expand agentPoolProfile = properties.agentPoolProfiles\n| extend taints = tostring(parse_json(agentPoolProfile.nodeTaints))\n| extend nodePool = tostring(parse_json(agentPoolProfile.name))\n| where taints has \"CriticalAddonsOnly=true:NoSchedule\" and  agentPoolProfile.minCount < 3\n| project recommendationId=\"7f7ae535-a5ba-4665-b7e0-c451dbdda01f\", name, id, tags, param1=strcat(\"nodePoolName: \", nodePool), param2=strcat(\"nodePoolMinNodeCount: \", agentPoolProfile.minCount)\n\n"
   },
   {
     "aprlGuid": "005ccbbd-aeab-46ef-80bd-9bd4479412ec",
@@ -6486,7 +6486,7 @@
     "recommendationResourceType": "Microsoft.ContainerService/managedClusters",
     "recommendationImpact": "High",
     "automationAvailable": true,
-    "query": "// Azure Resource Graph Query\n// Returns each AKS cluster with nodepools that have user nodepools with less than 2 nodes\nresources\n| where type == \"microsoft.containerservice/managedclusters\"\n| mv-expand agentPoolProfile = properties.agentPoolProfiles\n| extend taints = tostring(parse_json(agentPoolProfile.nodeTaints))\n| extend nodePool = tostring(parse_json(agentPoolProfile.name))\n| where taints !has \"CriticalAddonsOnly=true:NoSchedule\" and  agentPoolProfile.minCount < 2\n| project recommendationId=\"005ccbbd-aeab-46ef-80bd-9bd4479412ec\", name, id=id, tags,param1=strcat(\"nodePoolName: \", nodePool), param2=strcat(\"nodePoolMinNodeCount: \", agentPoolProfile.minCount)\n"
+    "query": "// Azure Resource Graph Query\n// Returns each AKS cluster with nodepools that have user nodepools with less than 2 nodes\nresources\n| where type =~ \"Microsoft.ContainerService/managedClusters\"\n| mv-expand agentPoolProfile = properties.agentPoolProfiles\n| extend\n    taints = tostring(parse_json(agentPoolProfile.nodeTaints)),\n    nodePool = tostring(parse_json(agentPoolProfile.name))\n| where taints !has \"CriticalAddonsOnly=true:NoSchedule\"\n| where (agentPoolProfile.enableAutoScaling == true and agentPoolProfile[\"minCount\"] < 2) or (agentPoolProfile.enableAutoScaling == false and agentPoolProfile[\"count\"] < 2)\n| project\n    recommendationId = \"005ccbbd-aeab-46ef-80bd-9bd4479412ec\",\n    name,\n    id,\n    tags,\n    param1 = strcat(\"nodePoolName: \", nodePool),\n    param2 = strcat(\"enableAutoScaling: \", agentPoolProfile.enableAutoScaling),\n    param3 = iff(tobool(agentPoolProfile.enableAutoScaling), strcat(\"nodePoolMinNodeCount: \", agentPoolProfile[\"minCount\"]), strcat(\"nodePoolNodeCount: \", agentPoolProfile[\"count\"]))\n"
   },
   {
     "aprlGuid": "a08a06a0-e41a-4b99-83bb-69ce8bca54cb",
@@ -7368,7 +7368,7 @@
     "recommendationResourceType": "Microsoft.Storage/storageAccounts",
     "recommendationImpact": "High",
     "automationAvailable": true,
-    "query": "// Azure Resource Graph Query\n// This query will return all storage accounts that are not using Zone or Region replication\nResources\n| where type =~ \"Microsoft.Storage/storageAccounts\"\n| where location in~ (\"australiaeast\", \"brazilsouth\", \"canadacentral\", \"centralindia\", \"centralus\", \"eastasia\", \"eastus\", \"eastus2\", \"francecentral\", \"germanywestcentral\", \"israelcentral\", \"italynorth\", \"japaneast\", \"japanwest\", \"koreacentral\", \"mexicocentral\", \"newzealandnorth\", \"northeurope\", \"norwayeast\", \"polandcentral\", \"qatarcentral\", \"southafricanorth\", \"southcentralus\", \"southeastasia\", \"spaincentral\", \"swedencentral\", \"switzerlandnorth\", \"uaenorth\", \"uksouth\", \"westeurope\", \"westus2\", \"westus3\", \"usgovvirginia\", \"chinanorth3\")\n| where sku.name in~ (\"Standard_LRS\", \"Premium_LRS\")\n| project recommendationId = \"e6c7e1cc-2f47-264d-aa50-1da421314472\", name, id, tags, param1 = strcat(\"sku: \", sku.name)\n\n"
+    "query": "// Azure Resource Graph Query\n// This query will return all storage accounts that are not using Zone or Region replication\nResources\n| where type =~ \"Microsoft.Storage/storageAccounts\"\n| where sku.name in~ (\"Standard_LRS\", \"Premium_LRS\")\n| project recommendationId = \"e6c7e1cc-2f47-264d-aa50-1da421314472\", name, id, tags, param1 = strcat(\"sku: \", sku.name)\n\n"
   },
   {
     "aprlGuid": "5587ef77-7a05-a74d-9c6e-449547a12f27",
@@ -9266,15 +9266,15 @@
     "recommendationMetadataState": "Active",
     "learnMoreLink": [
       {
-        "name": "Security guidelines for Oracle Database@Azure",
-        "url": "https://learn.microsoft.com/azure/cloud-adoption-framework/scenarios/oracle-iaas/oracle-security-overview-odaa"
+        "name": "Integrate Oracle Exadata Database@Azure with Azure Key Vault",
+        "url": "https://learn.microsoft.com/azure/oracle/oracle-db/manage-oracle-transparent-data-encryption-azure-key-vault"
       }
     ],
-    "recommendationControl": "HighAvailability",
-    "longDescription": "Oracle Key Vault として使用される VM に冗長性を持たせます。これは、顧客が独自キーを使用し、OCI vault を使用しない場合にのみ関連することに注意します。BCDR アーキテクチャに合わせ、2 つの可用性ゾーンまたはリージョンに、最低 4 ノードの Oracle Key Vault クラスターをデプロイすることを推奨します。\n",
+    "recommendationControl": "Security",
+    "longDescription": "Exadata ワークロード用の Oracle TDE マスター暗号化キーを Azure Key Vault に保存し、キー管理を一元化、セキュリティを強化、エンタープライズグレードの制御によるコンプライアンス対応を実現します。\n",
     "pgVerified": false,
-    "description": "顧客管理暗号キー用に可用性の高いクラスターに Oracle Key Vault をセットアップする",
-    "potentialBenefits": "Protect access to keys in case of VM or AZ/region failure.",
+    "description": "Exadata ワークロード用暗号化キーを Azure Key Vault に保存する",
+    "potentialBenefits": "Storing keys in AKV improves security and reliability.",
     "tags": [
       "ORACLE"
     ],
@@ -9304,7 +9304,7 @@
     "recommendationResourceType": "Microsoft.Subscription/subscriptions",
     "recommendationImpact": "High",
     "automationAvailable": false,
-    "query": "// cannot-be-validated-with-arg\n"
+    "query": "// Azure Resource Graph Query\n// This resource graph query will return rows if Oracle Database@Azure Infrastructure Maintenance is not Rolling\nresources\n| where type == \"oracle.database/cloudexadatainfrastructures\"\n| where properties.maintenanceWindow.patchingMode !~ \"Rolling\"\n| project recommendationId = \"02bfe908-d958-451a-a603-bef8277ae56a\",id=tostring(id),name,tags, param1 = \"ODAAInfraMaintRolling: False\"\n"
   },
   {
     "aprlGuid": "4c78fab4-845a-495d-ab14-3ad51de53a2a",
